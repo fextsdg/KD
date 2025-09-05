@@ -135,6 +135,14 @@
 
 11. git rebase main    # main 分支需要是最新的
 
+12. git pull origin refactor-central-log
+
+13. git add -u  #git 同步删除
+
+14. git commit --amend  #将这次提交与之前提交合并
+
+15. git checkout/switch <分支名> #切换分支
+
 
 
 ------
@@ -215,3 +223,22 @@ ADD COLUMN email VARCHAR(255) NOT NULL DEFAULT 'unknown@example.com' AFTER name;
 5. 读从库问题：（实现礼包码、激活码等功能时需注意）
 
 如果使用了 create 或 update 、 delete 更新了主库然后立刻读数据，如果从 从库 中读取数据，会导致数据不一致的现象。此时，应该从主库中读取数据。
+
+6. 基于游标的分页库（gorm-cursor-paginator），它会在底层把 SQL 的 LIMIT 设为 MaxResult+1，这是刻意为之：
+
+   - 为了判断“是否还有下一页”
+
+   - 查询 LIMIT = MaxResult + 1 条
+
+   - 如果实际返回条数 > MaxResult，则判定有下一页：取前 MaxResult 条返回；多出来的第 MaxResult+1 条只用于生成下一页的游标（after/next），不返回给调用方
+
+   - 如果返回条数 ≤ MaxResult，则判定没有下一页，NextToken 置空
+
+   - 这样做能避免再发一条 COUNT 或 OFFSET 查询，性能和正确性更稳定
+
+
+
+
+
+
+

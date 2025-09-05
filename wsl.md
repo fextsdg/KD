@@ -196,14 +196,14 @@ docker exec -it redis-7.2 sh
 1. **启动localstack(后台)**
 
    ```bash
-   localstack start (-d)
+   localstack start -d
    ```
 
 2. 创建本地SQS队列
 
    ```bash
    
-   
+   #payment
    # 创建第一个 FIFO 队列
    awslocal sqs create-queue \
      --queue-name seayoo-order-payment.fifo \
@@ -213,9 +213,30 @@ docker exec -it redis-7.2 sh
    awslocal sqs create-queue \
      --queue-name seayoo-payment-weixin-transfer.fifo \
      --attributes FifoQueue=true,ContentBasedDeduplication=true
+     
+   #doudian
+   awslocal sqs create-queue \
+     --queue-name seayoo-doudian.fifo \
+     --attributes FifoQueue=true,ContentBasedDeduplication=true
+    
+    #gm
+    awslocal sqs create-queue \
+     --queue-name seayoo-gm.fifo \
+     --attributes FifoQueue=true,ContentBasedDeduplication=true
+     
+     
+   #order
+   # 创建第一个 FIFO 队列
+   awslocal sqs create-queue \
+     --queue-name seayoo-order-shipping.fifo \
+     --attributes FifoQueue=true,ContentBasedDeduplication=true
    
+   # 创建第二个 FIFO 队列
+   awslocal sqs create-queue \
+     --queue-name seayoo-order-payment.fifo \
+     --attributes FifoQueue=true,ContentBasedDeduplication=true  
    ```
-
+   
    
 
 
@@ -327,7 +348,6 @@ source ~/.profile
 
 
 
-## 
 
 ### 生成ssh秘钥
 
